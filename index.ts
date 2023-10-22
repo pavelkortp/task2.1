@@ -9,7 +9,7 @@ function getFirstWord(a: string): number {
 
 function getUserNamings(a: { name: string, surname: string }): object {
     return {
-        fullname: a.name + " " + a.surname,
+        fullName: a.name + " " + a.surname,
         initials: a.name[0] + "." + a.surname[0]
     };
 }
@@ -25,29 +25,59 @@ function getAllProductNames(a: { products: Array<{ name: any }> }): Array<any> {
 
 // easy way is using 'as' keyword
 // hard way is ?...
-function hey(a: { name(): string }): string {
+function hey(a: { name: () => string, cuteness?:number, coolness?:number}): string {
     return "hey! i'm " + a.name();
 }
-hey({ name: () => "roma", cuteness: 100 })
-hey({ name: () => "vasya", coolness: 100 })
+console.log(hey({ name: () => "roma", cuteness: 100 })  );
+console.log(hey({ name: () => "vasya", coolness: 100 }));
 
 // 4.2
-function hey(abstractPet: { name(): string } | Cat | Dog): string {
+class Pet {
+    constructor(protected Name: string) { }
+    name(): string {
+        return this.Name;
+    }
+}
+
+class Dog extends Pet {
+    constructor(Name: string, public coolness: number) {
+        super(Name);
+    }
+    get type(): string {
+        return 'dog';
+    }
+}
+
+class Cat extends Pet {
+    constructor(Name: string, public cuteness: boolean) {
+        super(Name);
+    }
+    get type(): string {
+        return 'cat';
+    }
+
+}
+
+function hey2(abstractPet: Pet): string {
     return "hey! i'm " + abstractPet.name();
 }
-let a = new Cat("myavchik", true)
-let b = new Dog("gavchik", 333)
-hey(a)
-hey(b)
+let a = new Cat("myavchik", true);
+let b = new Dog("gavchik", 333);
+
+console.log(hey2(a));
+console.log(hey2(b));
 
 // 4.3
 
-function hey(a: { name(): string, type?: string, cuteness?: any, coolness?: any }): string {
+function hey3(a: { name: ()=>string, type?: string, cuteness?: any, coolness?: number }): string {
     return "hey! i'm " + a.name()
         + (a.type === "cat" ? ("cuteness: " + a.cuteness) : ("coolness: " + a.coolness))
 }
-hey({ name: () => "roma", type: "cat", cuteness: 100 })
-hey({ name: () => "vasya", type: "dog", coolness: 100 })
+
+console.log(hey3({ name: () => "roma", type: "cat", cuteness: 100 }));
+console.log(hey3({ name: () => "vasya", type: "dog", coolness: 100 }));
+
+
 
 // 5.
 
